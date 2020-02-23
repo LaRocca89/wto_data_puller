@@ -3,3 +3,4 @@ This repository is dedicated to simplifying the process for pulling data from th
 
 14/02/2020: Currently awaiting an API key from the WTO before I can begin developing this package. <br>
 15/02/2020: Created a script that executes a API query and outputs a JSON file.
+23/02/2020: Updated the library package to contain all queries available in the WTO manual. Also created a CSV save option for timeseries datapoint queries. The default datafiles produced are still JSON files. 
