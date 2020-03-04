@@ -1,7 +1,6 @@
 """
 Developed by Greg LaRocca, Please send any questions or comments to larocca89@gmail.com
 This project is version complete. However, the library will be refined over time as new features are requested.
-
 This script creates a simple defined function that can pull times series data from the WTO's API.
 For more information on the WTO's api see: https://apiportal.wto.org/
 Special thank you to the Requests library's team of developers for making this possible.
@@ -15,6 +14,22 @@ import time
 
 # for information on parameters see:
 # https://apiportal.wto.org/docs/services/version1/operations/get-data-i-i
+def get_json_data(url,
+                  proxies=None):
+    response = requests.get(url, proxies=proxies)
+    assert response.status_code == 200, "There was an error in the request"
+    json_data = response.json()
+    with open('WTO_API_TimeseriesData_' + str(time.strftime('%Y%m%d%H%M%S')) + '.json', 'w') as f:
+        json.dump(json_data, f, ensure_ascii=False, indent=4)
+
+
+def get_csv_data(url,
+                 proxies=None):
+    r = requests.get(url, proxies=proxies)
+    z = zipfile.ZipFile(io.BytesIO(r.content))
+    z.extractall()
+
+
 def get_time_series_datapoints(indicator_code,  # strings only
                                key,  # strings only
                                reporting_economy='all',
@@ -44,7 +59,7 @@ def get_time_series_datapoints(indicator_code,  # strings only
         with open('WTO_API_TimeseriesData_' + str(time.strftime('%Y%m%d%H%M%S')) + '.json', 'w') as f:
             json.dump(json_data, f, ensure_ascii=False, indent=4)
     elif frmt == 'csv':
-        r = requests.get(endpoint)
+        r = requests.get(endpoint, proxies=proxies)
         z = zipfile.ZipFile(io.BytesIO(r.content))
         z.extractall()
     else:
